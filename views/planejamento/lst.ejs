@@ -1,0 +1,50 @@
+
+<section class="painel">
+
+    <div class="painel-header">
+        <div>
+            <h2>Lista de planejamentos</h2>
+            <p>Consulte os planejamentos e organize os encontros do seu grupo.</p>
+        </div>
+
+        <a href="/planejamento/add" class="btn principal">
+            <i class="fas fa-plus"></i> Novo planejamento
+        </a>
+    </div>
+
+    <div class="planejamento-lista">
+
+        <% if (planejamentos && planejamentos.length > 0) { %>
+
+            <% planejamentos.forEach(p => { %>
+
+                <div class="encontro-card">
+
+                    <div class="dados">
+                        <h3><%= p.grupo && p.grupo.nome ? p.grupo.nome : 'Grupo' %></h3>
+                        <p><%= p.encontros ? p.encontros.length : 0 %> encontros</p>
+                    </div>
+
+                    <div class="acoes">
+                        <a href="/planejamento/edt/<%= p._id %>" class="btn principal">
+                            Editar
+                        </a>
+
+                        <a href="/planejamento/del/<%= p._id %>" class="btn principal">
+                            Excluir
+                        </a>
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        <% } else { %>
+
+            <p>Nenhum planejamento cadastrado.</p>
+
+        <% } %>
+
+    </div>
+
+</section>

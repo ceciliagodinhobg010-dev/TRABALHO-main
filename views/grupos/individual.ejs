@@ -1,0 +1,224 @@
+<%- include("../cabecalho2", { titulo: "Acutis IVC | " + (grupo ? grupo.nome : "Grupo") }) %>
+
+<section class="cabecalho">
+    <div class="titulo">
+        <h1><%= grupo.nome %></h1>
+        <p>
+            Ano: <%= grupo.ano %> | Dia: <%= grupo.dia %>
+            <% if (grupo.primeiroEncontro) { %> | 1º Encontro: <%= grupo.primeiroEncontro %> <% } %>
+        </p>
+    </div>
+</section>
+
+<!-- PAINEL 1: CADASTRAR NOVO CATEQUIZANDO -->
+<section class="painel">
+    <div class="painel-header">
+        <div>
+            <h2><i class="fa-solid fa-user-plus"></i> Novo Catequizando</h2>
+            <p>Adicione um catequizando e informe situação, ficha e batismo.</p>
+        </div>
+        <div class="acoes">
+            <a href="/grupos/relatorio/<%= grupo._id %>" class="btn principal">
+                <i class="fa-solid fa-table"></i> Ver Tabelas do Grupo
+            </a>
+            <a href="/grupos/lst" class="btn secundario">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <form action="/grupos/cadastroCatequizandos/<%= grupo._id %>" method="POST" class="painel-form">
+        <div class="campo">
+            <label>Nome do Catequizando:</label>
+            <input type="text" name="nome" placeholder="Nome completo" required>
+        </div>
+
+        <div class="campo">
+            <label>Situação:</label>
+            <select name="situacao">
+                <option value="Ativo">Ativo</option>
+                <option value="Desistente">Desistente</option>
+                <option value="Transferido">Transferido</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Já recebeu o Batismo?</label>
+            <select name="batismo">
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+                <option value="Não sei">Não sei</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label class="campo-check">
+                <input type="checkbox" name="fichaPreenchida" value="true">
+                Ficha de inscrição preenchida
+            </label>
+        </div>
+
+        <div class="acoes-formulario">
+            <button type="submit" class="btn principal">
+                <i class="fa-solid fa-check"></i> Salvar Catequizando
+            </button>
+        </div>
+    </form>
+</section>
+
+<!-- PAINEL 2: REGISTRAR DESISTÊNCIA -->
+<section class="painel">
+    <div class="painel-header">
+        <div>
+            <h2><i class="fa-solid fa-user-xmark"></i> Registrar Desistência</h2>
+            <p>Informe os dados caso algum catequizando tenha desistido.</p>
+        </div>
+    </div>
+
+    <form action="/grupos/desistencia/<%= grupo._id %>" method="POST" class="painel-form">
+        <div class="campo">
+            <label>Catequizando:</label>
+            <select name="catequizandoId" required>
+                <% catequizandos.forEach(cat => { %>
+                    <option value="<%= cat._id %>"><%= cat.nome %></option>
+                <% }) %>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Data da desistência:</label>
+            <input type="date" name="data" required>
+        </div>
+
+        <div class="campo">
+            <label>Frequência naquele momento (%):</label>
+            <input type="number" name="frequencia" placeholder="Ex: 75" required>
+        </div>
+
+        <div class="campo">
+            <label>Etapa:</label>
+            <input type="text" name="etapa" placeholder="Ex: 1ª Etapa" required>
+        </div>
+
+        <div class="campo">
+            <label>Motivo:</label>
+            <input type="text" name="motivo" placeholder="Descreva o motivo" required>
+        </div>
+
+        <div class="acoes-formulario">
+            <button type="submit" class="btn excluir">
+                <i class="fa-solid fa-user-xmark"></i> Confirmar Desistência
+            </button>
+        </div>
+    </form>
+</section>
+
+<!-- PAINEL 3: REGISTRAR TRANSFERÊNCIA -->
+<section class="painel">
+    <div class="painel-header">
+        <div>
+            <h2><i class="fa-solid fa-right-left"></i> Registrar Transferência</h2>
+            <p>Registre a transferência de paróquia e os ritos já recebidos.</p>
+        </div>
+    </div>
+
+    <form action="/grupos/transferencia/<%= grupo._id %>" method="POST" class="painel-form">
+        <div class="campo">
+            <label>Catequizando:</label>
+            <select name="catequizandoId" required>
+                <% catequizandos.forEach(cat => { %>
+                    <option value="<%= cat._id %>"><%= cat.nome %></option>
+                <% }) %>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Etapa:</label>
+            <input type="text" name="etapa" placeholder="Etapa atual" required>
+        </div>
+
+        <div class="campo">
+            <label>Ritos já recebidos:</label>
+            <div class="lista-checks-inline">
+                <label class="campo-check">
+                    <input type="checkbox" name="ritos" value="Batismo"> Batismo
+                </label>
+                <label class="campo-check">
+                    <input type="checkbox" name="ritos" value="Primeira Eucaristia"> Primeira Eucaristia
+                </label>
+            </div>
+        </div>
+
+        <div class="campo">
+            <label>Data da transferência:</label>
+            <input type="date" name="data" required>
+        </div>
+
+        <div class="campo">
+            <label>Paróquia de destino:</label>
+            <input type="text" name="paroquia" placeholder="Nome da paróquia" required>
+        </div>
+
+        <div class="acoes-formulario">
+            <button type="submit" class="btn principal">
+                <i class="fa-solid fa-right-left"></i> Confirmar Transferência
+            </button>
+        </div>
+    </form>
+</section>
+
+<!-- PAINEL 4: AGENDAR E MARCAR CONFISSÕES -->
+<section class="painel">
+    <div class="painel-header">
+        <div>
+            <h2><i class="fa-solid fa-hands-praying"></i> Confissões</h2>
+            <p>Agende data e horário e marque os catequizandos que já se confessaram.</p>
+        </div>
+    </div>
+
+    <form action="/grupos/agendarConfissao/<%= grupo._id %>" method="POST" class="painel-form">
+        <div class="campo">
+            <label>Data das Confissões:</label>
+            <input type="date" name="data" value="<%= grupo.confissaoData || '' %>" required>
+        </div>
+
+        <div class="campo">
+            <label>Horário:</label>
+            <input type="time" name="horario" value="<%= grupo.confissaoHorario || '' %>" required>
+        </div>
+
+        <div class="acoes-formulario">
+            <button type="submit" class="btn secundario">
+                <i class="fa-solid fa-calendar-check"></i> Salvar Data e Horário
+            </button>
+        </div>
+    </form>
+
+    <form action="/grupos/confissoes/<%= grupo._id %>" method="POST" class="painel-form">
+        <div class="campo">
+            <label>Quem já se confessou:</label>
+            <% if (catequizandos && catequizandos.some(c => c.situacao === 'Ativo')) { %>
+                <div class="lista-checks">
+                    <% catequizandos.forEach(cat => { %>
+                        <% if (cat.situacao === 'Ativo') { %>
+                            <label class="campo-check">
+                                <input type="checkbox" name="confessados" value="<%= cat._id %>" <%= cat.jaConfessou ? 'checked' : '' %>>
+                                <%= cat.nome %>
+                            </label>
+                        <% } %>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <p class="texto-vazio">Nenhum catequizando ativo para marcar confissão.</p>
+            <% } %>
+        </div>
+
+        <div class="acoes-formulario">
+            <button type="submit" class="btn principal">
+                <i class="fa-solid fa-check-double"></i> Salvar Confissões
+            </button>
+        </div>
+    </form>
+</section>
+
+<%- include("../rodape.ejs") %>

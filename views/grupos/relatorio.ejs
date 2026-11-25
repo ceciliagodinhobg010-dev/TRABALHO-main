@@ -1,0 +1,198 @@
+<%- include("../cabecalho2", { titulo: "Acutis IVC | Tabelas - " + (grupo ? grupo.nome : "Grupo") }) %>
+
+<section class="cabecalho">
+    <div class="titulo">
+        <h1><%= grupo.nome %> — Registros do Grupo</h1>
+        <p>Visualização em tabelas de catequizandos, desistências, transferências e confissões.</p>
+    </div>
+</section>
+
+<!-- TABELA 1: TODOS OS CATEQUIZANDOS -->
+<section class="painel">
+    <div class="painel-header">
+        <div>
+            <h2><i class="fa-solid fa-users"></i> Catequizandos (<%= catequizandos ? catequizandos.length : 0 %>)</h2>
+            <p>Situação geral, ficha de inscrição e batismo.</p>
+        </div>
+        <div class="acoes">
+            <a href="/grupos/cadastroCatequizandos/<%= grupo._id %>" class="btn secundario">
+                <i class="fa-solid fa-pen-to-square"></i> Voltar aos Formulários
+            </a>
+        </div>
+    </div>
+
+    <div class="tabela-container">
+        <table class="tabela-dados">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Situação</th>
+                    <th>Ficha de Inscrição</th>
+                    <th>Batismo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (catequizandos && catequizandos.length > 0) { %>
+                    <% catequizandos.forEach(cat => { %>
+                        <tr>
+                            <td><strong><%= cat.nome %></strong></td>
+                            <td>
+                                <% if (cat.situacao === 'Ativo') { %>
+                                    <span class="status-tag status-ativo">Ativo</span>
+                                <% } else if (cat.situacao === 'Desistente') { %>
+                                    <span class="status-tag status-desistente">Desistente</span>
+                                <% } else { %>
+                                    <span class="status-tag status-transferido">Transferido</span>
+                                <% } %>
+                            </td>
+                            <td><%= cat.fichaPreenchida ? 'Preenchida' : 'Pendente' %></td>
+                            <td><%= cat.batismo || 'Não informado' %></td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="4" class="tabela-vazia">Nenhum catequizando cadastrado.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- TABELA 2: DESISTENTES -->
+<section class="painel">
+    <div class="painel-header">
+        <div>
+            <h2><i class="fa-solid fa-user-xmark"></i> Desistentes</h2>
+            <p>Histórico de desistências registradas no grupo.</p>
+        </div>
+    </div>
+
+    <div class="tabela-container">
+        <table class="tabela-dados">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Data</th>
+                    <th>Frequência</th>
+                    <th>Etapa</th>
+                    <th>Motivo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% const desistentes = catequizandos ? catequizandos.filter(c => c.situacao === 'Desistente') : []; %>
+                <% if (desistentes.length > 0) { %>
+                    <% desistentes.forEach(cat => { %>
+                        <tr>
+                            <td><strong><%= cat.nome %></strong></td>
+                            <td><%= cat.data %></td>
+                            <td><%= cat.frequencia %>%</td>
+                            <td><%= cat.etapa %></td>
+                            <td><%= cat.motivo %></td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5" class="tabela-vazia">Nenhuma desistência registrada.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- TABELA 3: TRANSFERIDOS -->
+<section class="painel">
+    <div class="painel-header">
+        <div>
+            <h2><i class="fa-solid fa-right-left"></i> Transferidos</h2>
+            <p>Catequizandos transferidos para outras paróquias.</p>
+        </div>
+    </div>
+
+    <div class="tabela-container">
+        <table class="tabela-dados">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Etapa</th>
+                    <th>Ritos já recebidos</th>
+                    <th>Data</th>
+                    <th>Paróquia</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% const transferidos = catequizandos ? catequizandos.filter(c => c.situacao === 'Transferido') : []; %>
+                <% if (transferidos.length > 0) { %>
+                    <% transferidos.forEach(cat => { %>
+                        <tr>
+                            <td><strong><%= cat.nome %></strong></td>
+                            <td><%= cat.etapa %></td>
+                            <td><%= cat.ritos %></td>
+                            <td><%= cat.data %></td>
+                            <td><%= cat.paroquia %></td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5" class="tabela-vazia">Nenhuma transferência registrada.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- TABELA 4: CONFISSÕES -->
+<section class="painel">
+    <div class="painel-header">
+        <div>
+            <h2><i class="fa-solid fa-hands-praying"></i> Controle de Confissões</h2>
+            <p>
+                <% if (grupo.confissaoData) { %>
+                    Data: <strong><%= grupo.confissaoData %></strong> | Horário: <strong><%= grupo.confissaoHorario %></strong>
+                <% } else { %>
+                    Data e horário ainda não agendados.
+                <% } %>
+            </p>
+        </div>
+    </div>
+
+    <div class="tabela-container">
+        <table class="tabela-dados">
+            <thead>
+                <tr>
+                    <th>Nome do Catequizando</th>
+                    <th>Data da Confissão</th>
+                    <th>Horário</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% const ativos = catequizandos ? catequizandos.filter(c => c.situacao === 'Ativo') : []; %>
+                <% if (ativos.length > 0) { %>
+                    <% ativos.forEach(cat => { %>
+                        <tr>
+                            <td><strong><%= cat.nome %></strong></td>
+                            <td><%= grupo.confissaoData || '-' %></td>
+                            <td><%= grupo.confissaoHorario || '-' %></td>
+                            <td>
+                                <% if (cat.jaConfessou) { %>
+                                    <span class="status-tag status-ativo">Já se confessou</span>
+                                <% } else { %>
+                                    <span class="status-tag status-transferido">Pendente</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="4" class="tabela-vazia">Nenhum catequizando ativo no grupo.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<%- include("../rodape.ejs") %>

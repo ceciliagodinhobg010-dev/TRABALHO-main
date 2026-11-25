@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planejamento | Acutis IVC</title>
+    <link rel="stylesheet" href="/css/Catequista_Planejamento.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="/logo.jpg" alt="Acutis IVC">
+            <h2>Acutis IVC</h2>
+            <span>Sistema de Gestão da Catequese</span>
+        </div>
+        <nav>
+            <a href="/catequistaInicial"><i class="fas fa-house"></i> Início</a>
+            <a href="/planejamento" class="ativo"><i class="fas fa-calendar-days"></i> Planejamento</a>
+            <a href="/catequizandos"><i class="fas fa-clipboard-check"></i> Frequência</a>
+            <a href="/materiais"><i class="fas fa-book"></i> Materiais</a>
+            <a href="/grupos"><i class="fas fa-users"></i> Grupos</a>
+        </nav>
+    </aside>
+    <main class="principal">
+        <header class="banner"><img src="/topo.png" class="banner-img" alt="Banner"></header>
+
+        <section class="cabecalho"><div class="titulo">
+            <h1>Editar planejamento</h1><p>Selecione o tema de cada encontro e organize seu planejamento.</p>
+        </div></section>
+        <section class="cards">
+            <div class="card rosa"><div class="icone"><i class="fas fa-calendar"></i></div>
+                <div><h3><%= planejamento.encontros.length %></h3><span>Total de Encontros</span></div></div>
+            <div class="card verde"><div class="icone"><i class="fas fa-check"></i></div>
+                <div><h3><%= planejamento.encontros.filter(e => e.tema).length %></h3><span>Planejados</span></div></div>
+            <div class="card dourado"><div class="icone"><i class="fas fa-star"></i></div>
+                <div><h3><%= planejamento.encontros.filter(e => e.tema === 'Outro').length %></h3><span>Personalizados</span></div></div>
+            <div class="card verde"><div class="icone"><i class="fas fa-circle-check"></i></div>
+                <div><h3><%= planejamento.encontros.filter(e => e.status === 'Realizado').length %></h3><span>Realizados</span></div></div>
+        </section>
+        <section class="painel">
+            <div class="painel-header"><div><h2>Cronograma Catequético</h2>
+                <p>Organize os temas, o status e as observações de cada encontro.</p></div></div>
+            <form action="/planejamento/edt/<%= planejamento._id %>" method="POST">
+            <input type="hidden" name="grupo" value="<%= planejamento.grupo %>">
+                <div class="planejamento-lista">
+                    <% planejamento.encontros.forEach((encontro, i) => { %>
+                        <div class="encontro-card">
+                            <div class="dados">
+                                <h3>Encontro <%= encontro.numero %></h3>
+                                <p><%= encontro.data || 'Data não definida' %></p>
+                            </div>
+                            <input type="hidden" name="numero" value="<%= encontro.numero %>">
+                            <div class="campo">
+                                <label>Tema do encontro</label>
+                                
+
+<select name="tema" class="select-encontro">
+
+    <option value="">Selecione o tema do encontro</option>
+
+    <!-- LIVRO 1 -->
+    <optgroup label="Livro 1 - Pré-Catecumenato">
+
+        <option value="Jesus acolhe as crianças" <%= encontro.tema === 'Jesus acolhe as crianças' ? 'selected' : '' %>>1. Jesus acolhe as crianças</option>
+
+        <option value="Como Deus nos fala sobre seu Reino" <%= encontro.tema === 'Como Deus nos fala sobre seu Reino' ? 'selected' : '' %>>2. Como Deus nos fala sobre seu Reino</option>
+
+        <option value="Jesus: uma criança enviada por Deus" <%= encontro.tema === 'Jesus: uma criança enviada por Deus' ? 'selected' : '' %>>3. Jesus: uma criança enviada por Deus</option>
+
+        <option value="Jesus, as crianças e o Reino de Deus" <%= encontro.tema === 'Jesus, as crianças e o Reino de Deus' ? 'selected' : '' %>>4. Jesus, as crianças e o Reino de Deus</option>
+
+        <option value="Maria, mãe de Jesus e nossa mãe" <%= encontro.tema === 'Maria, mãe de Jesus e nossa mãe' ? 'selected' : '' %>>5. Maria, mãe de Jesus e nossa mãe</option>
+
+        <option value="Por que mataram Jesus?" <%= encontro.tema === 'Por que mataram Jesus?' ? 'selected' : '' %>>6. Por que mataram Jesus?</option>
+
+        <option value="Deus Pai que é bom deu Lhe a vida novamente" <%= encontro.tema === 'Deus Pai que é bom deu Lhe a vida novamente' ? 'selected' : '' %>>7. Deus Pai que é bom deu Lhe a vida novamente</option>
+
+        <option value="Jesus vivo faz de nós sua família" <%= encontro.tema === 'Jesus vivo faz de nós sua família' ? 'selected' : '' %>>8. Jesus vivo faz de nós sua família</option>
+
+        <option value="É tempo de vigiar e esperar" <%= encontro.tema === 'É tempo de vigiar e esperar' ? 'selected' : '' %>>9. É tempo de vigiar e esperar</option>
+        
+        <option value="Outro" <%= encontro.tema === 'Outro' ? 'selected' : '' %>> Outro (tema personalizado)</option>
+
+    </optgroup>
+
+    <!-- LIVRO 2 -->
+    <optgroup label="Livro 2 - Catecumenato">
+
+        <option value="Como Jesus, crescer em sabedoria, estatura e graça" <%= encontro.tema === 'Como Jesus, crescer em sabedoria, estatura e graça' ? 'selected' : '' %>>1. Como Jesus, crescer em sabedoria, estatura e graça</option>
+
+        <option value="RITO: Celebração de Entrada no Catecumenato" <%= encontro.tema === 'RITO: Celebração de Entrada no Catecumenato' ? 'selected' : '' %>>RITO: Celebração de Entrada no Catecumenato</option>
+
+        <option value="Deus nos fala nos acontecimentos" <%= encontro.tema === 'Deus nos fala nos acontecimentos' ? 'selected' : '' %>>2. Deus nos fala nos acontecimentos</option>
+
+        <option value="Deus fala na natureza" <%= encontro.tema === 'Deus fala na natureza' ? 'selected' : '' %>>3. Deus fala na natureza</option>
+
+        <option value="Deus fala na história do povo de Israel e em Jesus" <%= encontro.tema === 'Deus fala na história do povo de Israel e em Jesus' ? 'selected' : '' %>>4. Deus fala na história do povo de Israel e em Jesus</option>
+
+        <option value="Deus nos fala no grupo de seguidores de Jesus" <%= encontro.tema === 'Deus nos fala no grupo de seguidores de Jesus' ? 'selected' : '' %>>5. Deus nos fala no grupo de seguidores de Jesus</option>
+
+        <option value="Deus nos fala no Mistério Pascal" <%= encontro.tema === 'Deus nos fala no Mistério Pascal' ? 'selected' : '' %>>6. Deus nos fala no Mistério Pascal</option>
+
+        <option value="Deus fala na Bíblia" <%= encontro.tema === 'Deus fala na Bíblia' ? 'selected' : '' %>>7. Deus fala na Bíblia</option>
+
+        <option value="RITO: Celebração de Entrega da Palavra de Deus" <%= encontro.tema === 'RITO: Celebração de Entrega da Palavra de Deus' ? 'selected' : '' %>>RITO: Celebração de Entrega da Palavra de Deus</option>
+
+        <option value="Deus Pai/Mãe é o nosso criador" <%= encontro.tema === 'Deus Pai/Mãe é o nosso criador' ? 'selected' : '' %>>8. Deus Pai/Mãe é o nosso criador</option>
+
+        <option value="Eu fui criado por Deus" <%= encontro.tema === 'Eu fui criado por Deus' ? 'selected' : '' %>>9. Eu fui criado por Deus</option>
+
+        <option value="Eu e minha relação com a família" <%= encontro.tema === 'Eu e minha relação com a família' ? 'selected' : '' %>>10. Eu e minha relação com a família</option>
+
+        <option value="Eu e minha relação com os outros" <%= encontro.tema === 'Eu e minha relação com os outros' ? 'selected' : '' %>>11. Eu e minha relação com os outros</option>
+
+        <option value="Eu e minha relação com o ambiente" <%= encontro.tema === 'Eu e minha relação com o ambiente' ? 'selected' : '' %>>12. Eu e minha relação com o ambiente</option>
+
+        <option value="Celebração da Vida" <%= encontro.tema === 'Celebração da Vida' ? 'selected' : '' %>>13. Celebração da Vida</option>
+
+        <option value="Outro" <%= encontro.tema === 'Outro' ? 'selected' : '' %>> Outro (tema personalizado)</option>
+
+    </optgroup>
+
+    <!-- LIVRO 3 -->
+    <optgroup label="Livro 3 - Catecumenato">
+
+        <option value="O Enviado de Deus: Jesus" <%= encontro.tema === 'O Enviado de Deus: Jesus' ? 'selected' : '' %>>14. O Enviado de Deus: Jesus</option>
+
+        <option value="A Infância de Jesus" <%= encontro.tema === 'A Infância de Jesus' ? 'selected' : '' %>>15. A Infância de Jesus</option>
+
+        <option value="Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: Mateus" <%= encontro.tema === 'Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: Mateus' ? 'selected' : '' %>>16. Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: Mateus</option>
+
+        <option value="Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: Marcos" <%= encontro.tema === 'Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: Marcos' ? 'selected' : '' %>>17. Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: Marcos</option>
+
+        <option value="Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: Lucas" <%= encontro.tema === 'Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: Lucas' ? 'selected' : '' %>>18. Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: Lucas</option>
+
+        <option value="Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: João" <%= encontro.tema === 'Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: João' ? 'selected' : '' %>>19. Os Evangelhos nos falam das Obras e Ensinamentos de Jesus: João</option>
+
+        <option value="Evangelho da Igreja: Atos dos Apóstolos" <%= encontro.tema === 'Evangelho da Igreja: Atos dos Apóstolos' ? 'selected' : '' %>>20. Evangelho da Igreja: Atos dos Apóstolos</option>
+
+        <option value="Os ensinamentos de Jesus: Parábola do Semeador" <%= encontro.tema === 'Os ensinamentos de Jesus: Parábola do Semeador' ? 'selected' : '' %>>21. Os ensinamentos de Jesus: Parábola do Semeador</option>
+
+        <option value="Os ensinamentos de Jesus: Parábola da Ovelha Perdida" <%= encontro.tema === 'Os ensinamentos de Jesus: Parábola da Ovelha Perdida' ? 'selected' : '' %>>22. Os ensinamentos de Jesus: Parábola da Ovelha Perdida</option>
+
+        <option value="Os ensinamentos de Jesus: Parábola dos Talentos" <%= encontro.tema === 'Os ensinamentos de Jesus: Parábola dos Talentos' ? 'selected' : '' %>>23. Os ensinamentos de Jesus: Parábola dos Talentos</option>
+
+        <option value="Os ensinamentos de Jesus: Parábola da Videira" <%= encontro.tema === 'Os ensinamentos de Jesus: Parábola da Videira' ? 'selected' : '' %>>24. Os ensinamentos de Jesus: Parábola da Videira</option>
+
+        <option value="As ações de Jesus: refeição com as pessoas" <%= encontro.tema === 'As ações de Jesus: refeição com as pessoas' ? 'selected' : '' %>>25. As ações de Jesus: refeição com as pessoas</option>
+
+        <option value="As ações de Jesus: acolhida dos que erram" <%= encontro.tema === 'As ações de Jesus: acolhida dos que erram' ? 'selected' : '' %>>26. As ações de Jesus: acolhida dos que erram</option>
+        
+        <option value="Outro" <%= encontro.tema === 'Outro' ? 'selected' : '' %>> Outro (tema personalizado)</option>
+
+    </optgroup>
+
+    <!-- LIVRO 4 -->
+    <optgroup label="Livro 4 - Catecumenato">
+
+        <option value="As ações de Jesus: cura dos doentes" <%= encontro.tema === 'As ações de Jesus: cura dos doentes' ? 'selected' : '' %>>27. As ações de Jesus: cura dos doentes</option>
+
+        <option value="As ações de Jesus: encontro com os que precisam de ajuda" <%= encontro.tema === 'As ações de Jesus: encontro com os que precisam de ajuda' ? 'selected' : '' %>>28. As ações de Jesus: encontro com os que precisam de ajuda</option>
+
+        <option value="Jesus nos chama para fazer coisas boas: ENVIO" <%= encontro.tema === 'Jesus nos chama para fazer coisas boas: ENVIO' ? 'selected' : '' %>>29. Jesus nos chama para fazer coisas boas: ENVIO</option>
+
+        <option value="Jesus nos chama para fazer coisas boas: VOCAÇÃO" <%= encontro.tema === 'Jesus nos chama para fazer coisas boas: VOCAÇÃO' ? 'selected' : '' %>>30. Jesus nos chama para fazer coisas boas: VOCAÇÃO</option>
+
+        <option value="Jesus nos chama para fazer coisas boas: O BOM SAMARITANO" <%= encontro.tema === 'Jesus nos chama para fazer coisas boas: O BOM SAMARITANO' ? 'selected' : '' %>>31. Jesus nos chama para fazer coisas boas: O BOM SAMARITANO</option>
+
+        <option value="Jesus nos chama para fazer coisas boas: OBRAS DE MISERICÓRDIAS ESPIRITUAIS" <%= encontro.tema === 'Jesus nos chama para fazer coisas boas: OBRAS DE MISERICÓRDIAS ESPIRITUAIS' ? 'selected' : '' %>>32. Jesus nos chama para fazer coisas boas: OBRAS DE MISERICÓRDIAS ESPIRITUAIS</option>
+
+        <option value="Jesus nos chama para fazer coisas boas: OBRAS DE MISERICÓRDIAS CORPORAIS" <%= encontro.tema === 'Jesus nos chama para fazer coisas boas: OBRAS DE MISERICÓRDIAS CORPORAIS' ? 'selected' : '' %>>33. Jesus nos chama para fazer coisas boas: OBRAS DE MISERICÓRDIAS CORPORAIS</option>
+
+        <option value="Jesus morre numa cruz para dar vida" <%= encontro.tema === 'Jesus morre numa cruz para dar vida' ? 'selected' : '' %>>34. Jesus morre numa cruz para dar vida</option>
+
+        <option value="Jesus Cristo vivo está entre nós" <%= encontro.tema === 'Jesus Cristo vivo está entre nós' ? 'selected' : '' %>>35. Jesus Cristo vivo está entre nós</option>
+
+        <option value="Jornada dos amigos de Jesus" <%= encontro.tema === 'Jornada dos amigos de Jesus' ? 'selected' : '' %>>36. Jornada dos amigos de Jesus</option>
+        
+        <option value="Outro" <%= encontro.tema === 'Outro' ? 'selected' : '' %>> Outro (tema personalizado)</option>
+
+    </optgroup>
+
+    <!-- LIVRO 5 -->
+    <optgroup label="Livro 5 - Catecumenato">
+
+        <option value="Início da Quaresma – Quarta-feira de Cinzas" <%= encontro.tema === 'Início da Quaresma – Quarta-feira de Cinzas' ? 'selected' : '' %>>37. Início da Quaresma – Quarta-feira de Cinzas</option>
+
+        <option value="Campanha da Fraternidade" <%= encontro.tema === 'Campanha da Fraternidade' ? 'selected' : '' %>>38. Campanha da Fraternidade</option>
+
+        <option value="Encontro da Campanha da Fraternidade elaborado anualmente pela CNBB" <%= encontro.tema === 'Encontro da Campanha da Fraternidade elaborado anualmente pela CNBB' ? 'selected' : '' %>>39. Encontro da Campanha da Fraternidade elaborado anualmente pela CNBB</option>
+
+        <option value="Encontro da Campanha da Fraternidade elaborado anualmente pela CNBB (2)" <%= encontro.tema === 'Encontro da Campanha da Fraternidade elaborado anualmente pela CNBB (2)' ? 'selected' : '' %>>40. Encontro da Campanha da Fraternidade elaborado anualmente pela CNBB</option>
+
+        <option value="Quaresma: Purificando o Coração para a Páscoa" <%= encontro.tema === 'Quaresma: Purificando o Coração para a Páscoa' ? 'selected' : '' %>>41. Quaresma: Purificando o Coração para a Páscoa</option>
+
+        <option value="Via Sacra: Jesus é nosso Rei" <%= encontro.tema === 'Via Sacra: Jesus é nosso Rei' ? 'selected' : '' %>>42. Via Sacra: Jesus é nosso Rei</option>
+
+        <option value="Os discípulos veem Jesus rezar" <%= encontro.tema === 'Os discípulos veem Jesus rezar' ? 'selected' : '' %>>43. Os discípulos veem Jesus rezar</option>
+
+        <option value="Jesus ensina a rezar" <%= encontro.tema === 'Jesus ensina a rezar' ? 'selected' : '' %>>44. Jesus ensina a rezar</option>
+
+        <option value="RITO: Celebração de Entrega da Oração do Senhor" <%= encontro.tema === 'RITO: Celebração de Entrega da Oração do Senhor' ? 'selected' : '' %>>RITO: Celebração de Entrega da Oração do Senhor</option>
+
+        <option value="Práticas de Oração: Leitura Orante da Palavra de Deus" <%= encontro.tema === 'Práticas de Oração: Leitura Orante da Palavra de Deus' ? 'selected' : '' %>>45. Práticas de Oração: Leitura Orante da Palavra de Deus</option>
+
+        <option value="Práticas de Oração: Ofício Divino para crianças" <%= encontro.tema === 'Práticas de Oração: Ofício Divino para crianças' ? 'selected' : '' %>>46. Práticas de Oração: Ofício Divino para crianças</option>
+
+        <option value="Ascenção do Senhor" <%= encontro.tema === 'Ascenção do Senhor' ? 'selected' : '' %>>47. Ascenção do Senhor</option>
+
+        <option value="Pentecostes" <%= encontro.tema === 'Pentecostes' ? 'selected' : '' %>>48. Pentecostes</option>
+        
+        <option value="Outro" <%= encontro.tema === 'Outro' ? 'selected' : '' %>> Outro (tema personalizado)</option>
+
+    </optgroup>
+
+    <!-- LIVRO 6 -->
+    <optgroup label="Livro 6 - Catecumenato">
+
+        <option value="Maria, Mãe de Cristo e nossa Mãe" <%= encontro.tema === 'Maria, Mãe de Cristo e nossa Mãe' ? 'selected' : '' %>>49. Maria, Mãe de Cristo e nossa Mãe</option>
+
+        <option value="Origem da família de Jesus" <%= encontro.tema === 'Origem da família de Jesus' ? 'selected' : '' %>>50. Origem da família de Jesus</option>
+
+        <option value="A Família de Israel: Patriarcas" <%= encontro.tema === 'A Família de Israel: Patriarcas' ? 'selected' : '' %>>51. A Família de Israel: Patriarcas</option>
+
+        <option value="A Família de Israel: Moisés" <%= encontro.tema === 'A Família de Israel: Moisés' ? 'selected' : '' %>>52. A Família de Israel: Moisés</option>
+
+        <option value="A Família de Israel: Juízes" <%= encontro.tema === 'A Família de Israel: Juízes' ? 'selected' : '' %>>53. A Família de Israel: Juízes</option>
+
+        <option value="A Família de Israel: Reis" <%= encontro.tema === 'A Família de Israel: Reis' ? 'selected' : '' %>>54. A Família de Israel: Reis</option>
+
+        <option value="A Família de Israel: Profetas" <%= encontro.tema === 'A Família de Israel: Profetas' ? 'selected' : '' %>>55. A Família de Israel: Profetas</option>
+
+        <option value="O retrato da primeira família Cristã" <%= encontro.tema === 'O retrato da primeira família Cristã' ? 'selected' : '' %>>56. O retrato da primeira família Cristã</option>
+
+        <option value="Vocações - Serviço de Animação Vocacional" <%= encontro.tema === 'Vocações - Serviço de Animação Vocacional' ? 'selected' : '' %>>57. Vocações - Serviço de Animação Vocacional</option>
+
+        <option value="A família Igreja é iluminada pela Luz da Fé: Creio em Deus Pai e Criador" <%= encontro.tema === 'A família Igreja é iluminada pela Luz da Fé: Creio em Deus Pai e Criador' ? 'selected' : '' %>>58. A família Igreja é iluminada pela Luz da Fé: Creio em Deus Pai e Criador</option>
+
+        <option value="A família Igreja é iluminada pela Luz da Fé: Creio na Santíssima Trindade" <%= encontro.tema === 'A família Igreja é iluminada pela Luz da Fé: Creio na Santíssima Trindade' ? 'selected' : '' %>>59. A família Igreja é iluminada pela Luz da Fé: Creio na Santíssima Trindade</option>
+
+        <option value="A família Igreja é iluminada pela Luz da Fé: Creio na Igreja: Una, Santa, Católica e Apostólica" <%= encontro.tema === 'A família Igreja é iluminada pela Luz da Fé: Creio na Igreja: Una, Santa, Católica e Apostólica' ? 'selected' : '' %>>60. A família Igreja é iluminada pela Luz da Fé: Creio na Igreja: Una, Santa, Católica e Apostólica</option>
+
+        <option value="Nossa ajuda à família - Igreja" <%= encontro.tema === 'Nossa ajuda à família - Igreja' ? 'selected' : '' %>>61. Nossa ajuda à família - Igreja</option>
+
+        <option value="RITO: Entrega do Símbolo da Fé" <%= encontro.tema === 'RITO: Entrega do Símbolo da Fé' ? 'selected' : '' %>>RITO: Entrega do Símbolo da Fé</option>
+
+        <option value="Gincana Bíblica" <%= encontro.tema === 'Gincana Bíblica' ? 'selected' : '' %>>Gincana Bíblica</option>
+         
+        <option value="Outro" <%= encontro.tema === 'Outro' ? 'selected' : '' %>> Outro (tema personalizado)</option>
+
+    </optgroup>
+
+    <!-- LIVRO 7 -->
+    <optgroup label="Livro 7 - Catecumenato">
+
+        <option value="Com Jesus, caminhamos na Igreja" <%= encontro.tema === 'Com Jesus, caminhamos na Igreja' ? 'selected' : '' %>>62. Com Jesus, caminhamos na Igreja</option>
+
+        <option value="Mandamentos da Igreja de Jesus" <%= encontro.tema === 'Mandamentos da Igreja de Jesus' ? 'selected' : '' %>>63. Mandamentos da Igreja de Jesus</option>
+
+        <option value="Maria, Mãe das Comunidades" <%= encontro.tema === 'Maria, Mãe das Comunidades' ? 'selected' : '' %>>64. Maria, Mãe das Comunidades</option>
+
+        <option value="Entrega do Rosário da Virgem Maria" <%= encontro.tema === 'Entrega do Rosário da Virgem Maria' ? 'selected' : '' %>>65. Entrega do Rosário da Virgem Maria</option>
+
+        <option value="Preparação para as Romarias" <%= encontro.tema === 'Preparação para as Romarias' ? 'selected' : '' %>>66. Preparação para as Romarias</option>
+
+        <option value="Jesus Cristo, a presença do Pai" <%= encontro.tema === 'Jesus Cristo, a presença do Pai' ? 'selected' : '' %>>67. Jesus Cristo, a presença do Pai</option>
+
+        <option value="A família-Igreja continua a presença de Cristo" <%= encontro.tema === 'A família-Igreja continua a presença de Cristo' ? 'selected' : '' %>>68. A família-Igreja continua a presença de Cristo</option>
+
+        <option value="Os Sete Sacramentos da Igreja" <%= encontro.tema === 'Os Sete Sacramentos da Igreja' ? 'selected' : '' %>>69. Os Sete Sacramentos da Igreja</option>
+
+        <option value="Batismo: início da Vida Cristã" <%= encontro.tema === 'Batismo: início da Vida Cristã' ? 'selected' : '' %>>70. Batismo: início da Vida Cristã</option>
+
+        <option value="Eucaristia: o alimento da família-Igreja" <%= encontro.tema === 'Eucaristia: o alimento da família-Igreja' ? 'selected' : '' %>>71. Eucaristia: o alimento da família-Igreja</option>
+
+        <option value="Reconciliação" <%= encontro.tema === 'Reconciliação' ? 'selected' : '' %>>72. Reconciliação</option>
+
+        <option value="Advento" <%= encontro.tema === 'Advento' ? 'selected' : '' %>>73. Advento</option>
+        
+        <option value="Outro" <%= encontro.tema === 'Outro' ? 'selected' : '' %>> Outro (tema personalizado)</option>
+    </optgroup>
+
+</select>
+
+<optgroup label="Personalizado">
+  <option value="Outro">Outro tema</option>
+</optgroup>
+                                </select>
+                            </div>
+                            <div class="campo">
+                                <label>Status</label>
+                                <select name="status" class="status-encontro">
+                                    <option value="Pendente" <%= encontro.status === 'Pendente' ? 'selected' : '' %>>Pendente</option>
+                                    <option value="Planejado" <%= encontro.status === 'Planejado' ? 'selected' : '' %>>Planejado</option>
+                                    <option value="Realizado" <%= encontro.status === 'Realizado' ? 'selected' : '' %>>Realizado</option>
+                                </select>
+                            </div>
+                            <div class="campo">
+                                <label>Observações</label>
+                                <textarea name="observacao" class="observacao-encontro" placeholder="Adicione observações sobre o encontro..."><%= encontro.observacao || '' %></textarea>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+                <button type="submit" class="btn principal"><i class="fas fa-save"></i> Salvar Planejamento</button>
+                <a href="/planejamento/lst">Cancelar</a>
+            </form>
+        </section>
+<%- include("../rodape.ejs") %>
